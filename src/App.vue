@@ -40,7 +40,7 @@
       ref="openfileinput"
       accept="*.json"
       type="file"
-      style="visibility: hidden"
+      style="display: none"
       @change="open_file"
     />
     <router-view />
