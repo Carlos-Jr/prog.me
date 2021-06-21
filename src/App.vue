@@ -9,7 +9,7 @@
       <template #start>
         <b-navbar-dropdown label="Projeto">
           <b-navbar-item @click="new_file"> Novo </b-navbar-item>
-          <b-navbar-item> Abrir </b-navbar-item>
+          <b-navbar-item @click="launch_openfile"> Abrir </b-navbar-item>
           <b-navbar-item @click="save_file"> Salvar </b-navbar-item>
           <hr class="navbar-divider" />
           <b-navbar-item> Exportar </b-navbar-item>
@@ -36,6 +36,13 @@
         </b-navbar-item>
       </template>
     </b-navbar>
+    <input
+      ref="openfileinput"
+      accept="*.json"
+      type="file"
+      style="visibility: hidden"
+      @change="open_file"
+    />
     <router-view />
   </div>
 </template>
@@ -62,6 +69,20 @@ export default {
         hasIcon: true,
         onConfirm: () => this.$store.commit("new_file"),
       });
+    },
+    launch_openfile() {
+      this.$refs.openfileinput.click();
+    },
+    open_file(event) {
+      const file = event.target.files[0];
+      if (!file) {
+        this.$buefy.dialog.alert("Erro ao abrir arquivo");
+      }
+      const fr = new FileReader();
+
+      fr.onload = (e) => {
+        this.$store.state.current_file = JSON.parse(e.target.result);
+      };
     },
     save_file() {
       const data = JSON.stringify(this.$store.state.current_file);
