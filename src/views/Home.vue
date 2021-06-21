@@ -1,17 +1,14 @@
 <template>
-  <div class="home">
-    <pinsManager></pinsManager>
-  </div>
+  <div class="home"></div>
 </template>
 
 <script>
-// @ is an alias to /src
-import pinsManager from '@/components/pinsManager.vue';
+// import pinsManager from "@/components/pinsManager.vue";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
-    pinsManager,
+    // pinsManager,
   },
 };
 </script>

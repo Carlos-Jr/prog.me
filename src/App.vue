@@ -1,71 +1,41 @@
 <template>
   <div id="app">
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-      <div class="navbar-brand">
-        <a class="navbar-item" href="#">
-          <img src="./assets/logo.png" width="112" height="28" />
-        </a>
+    <b-navbar>
+      <template #brand>
+        <b-navbar-item tag="router-link" :to="{ path: '/' }">
+          <img src="./assets/logo.png" alt="Prog.me" />
+        </b-navbar-item>
+      </template>
+      <template #start>
+        <b-navbar-dropdown label="Projeto">
+          <b-navbar-item @click="new_file"> Novo </b-navbar-item>
+          <b-navbar-item> Abrir </b-navbar-item>
+          <b-navbar-item @click="save_file"> Salvar </b-navbar-item>
+          <hr class="navbar-divider" />
+          <b-navbar-item> Exportar </b-navbar-item>
+        </b-navbar-dropdown>
+        <b-navbar-dropdown label="Editor">
+          <b-navbar-item @click="switch_stepNumber">
+            Mostrar números dos passos <b v-if="show_stepNumber"> OK</b>
+          </b-navbar-item>
+          <b-navbar-item @click="switch_arduinoCode">
+            Exibir código Arduino <b v-if="show_arduinoCode"> OK</b>
+          </b-navbar-item>
+          <b-navbar-item @click="switch_advancedMode">
+            Ver modo avançado <b v-if="show_advancedMode"> OK</b>
+          </b-navbar-item>
+        </b-navbar-dropdown>
+      </template>
 
-        <a
-          role="button"
-          class="navbar-burger"
-          aria-label="menu"
-          aria-expanded="false"
-          data-target="navbarBasicExample"
-        >
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-        </a>
-      </div>
-
-      <div id="navbarMenu" class="navbar-menu">
-        <div class="navbar-start">
-          <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link"> Arquivo </a>
-
-            <div class="navbar-dropdown">
-              <a class="navbar-item"> Novo </a>
-              <a class="navbar-item"> Abrir projeto </a>
-              <a class="navbar-item"> Salvar projeto </a>
-              <hr class="navbar-divider" />
-              <a class="navbar-item"> Exportar código Arduino</a>
-            </div>
-          </div>
-          <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link"> Código </a>
-
-            <div class="navbar-dropdown">
-              <a class="navbar-item" @click="switch_stepNumber">
-                Mostrar números dos passos
-                <b v-if="show_stepNumber"> OK</b>
-              </a>
-              <a class="navbar-item" @click="switch_arduinoCode">
-                Exibir código Arduino <b v-if="show_arduinoCode"> OK</b>
-              </a>
-              <a class="navbar-item" @click="switch_advancedMode">
-                Ver estrutura avançada <b v-if="show_advancedMode"> OK</b>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="navbar-end">
-          <div class="navbar-item">
-            <div class="buttons">
-              <a class="button is-primary">
-                <strong>Sign up</strong>
-              </a>
-              <a class="button is-light"> Log in </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/visualcode">visualcode</router-link>
-    </div>
+      <template #end>
+        <b-navbar-item tag="div">
+          <router-link to="/"> Configurações </router-link>
+        </b-navbar-item>
+        <b-navbar-item tag="div">
+          <a class="button is-primary" @click="send_file"> Enviar </a>
+        </b-navbar-item>
+      </template>
+    </b-navbar>
     <router-view />
   </div>
 </template>
@@ -81,6 +51,54 @@ export default {
     },
     switch_stepNumber() {
       this.$store.commit("switch_stepNumber");
+    },
+    new_file() {
+      this.$buefy.dialog.confirm({
+        title: "Iniciar novo projeto",
+        message:
+          "Tem certeza que deseja iniciar um novo projeto? (Lembre-se de salvar o atual)",
+        type: "is-danger",
+        confirmText: "Criar novo",
+        hasIcon: true,
+        onConfirm: () => this.$store.commit("new_file"),
+      });
+    },
+    save_file() {
+      const data = JSON.stringify(this.$store.state.current_file);
+      const blob = new Blob([data], { type: "text/plain" });
+      const e = document.createEvent("MouseEvents"),
+        a = document.createElement("a");
+      a.download = this.$store.state.current_file.name + ".json";
+      a.href = window.URL.createObjectURL(blob);
+      a.dataset.downloadurl = ["text/json", a.download, a.href].join(":");
+      e.initEvent(
+        "click",
+        true,
+        false,
+        window,
+        0,
+        0,
+        0,
+        0,
+        0,
+        false,
+        false,
+        false,
+        false,
+        0,
+        null
+      );
+      a.dispatchEvent(e);
+    },
+    send_file() {
+      this.$buefy.dialog.confirm({
+        title: "Enviar arquivo",
+        message: "Enviar arquivo para dispositivo?",
+        type: "is-danger",
+        confirmText: "Enviar",
+        hasIcon: true,
+        onConfirm: () => this.$buefy.dialog.alert("Serviço indisponível"),
+      });
     },
   },
   computed: {

@@ -1,50 +1,55 @@
 <template>
   <div id="app">
-    <vue-nestable v-model="nestableItems">
-      <vue-nestable-handle slot-scope="{ item }" :item="item">
-        {{ item.text }}
-      </vue-nestable-handle>
-    </vue-nestable>
+    <div class="columns">
+      <div class="column is-one-quarter">
+        <section class="hero is-primary is-fullheight-with-navbar">
+          <div class="hero-body">
+            <div class="">
+              <p class="title">Blocos</p>
+              <p class="subtitle">Fullheight subtitle</p>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="column">
+        <section class="hero is-light is-fullheight-with-navbar">
+          <div class="hero-body">
+            <div class="">
+              <p class="title">Código</p>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="column" v-if="show_arduinoCode">
+        <section class="hero is-light is-fullheight-with-navbar">
+          <div class="hero-body">
+            <div class="">
+              <p class="title">Código Arduino</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { VueNestable, VueNestableHandle } from 'vue-nestable';
-
 export default {
-  name: 'App',
-  components: {
-    VueNestable,
-    VueNestableHandle,
-  },
+  name: "App",
+  components: {},
   data() {
-    return {
-      text: '',
-      nestableItems: [
-        {
-          id: 0,
-          type: 'conditional',
-          text: 'Andy',
-        },
-        {
-          id: 1,
-          type: 'conditional',
-          text: 'Harry',
-          children: [
-            {
-              id: 2,
-              type: 'command',
-              text: 'David',
-            },
-          ],
-        },
-        {
-          id: 3,
-          type: 'command',
-          text: 'Lisa',
-        },
-      ],
-    };
+    return {};
+  },
+  computed: {
+    show_stepNumber: function () {
+      return this.$store.state.show_stepNumber;
+    },
+    show_arduinoCode: function () {
+      return this.$store.state.show_arduinoCode;
+    },
+    show_advancedMode: function () {
+      return this.$store.state.show_advancedMode;
+    },
   },
 };
 </script>
