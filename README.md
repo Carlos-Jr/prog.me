@@ -1,9 +1,24 @@
-# Prog.me by IFMG Ibirité
-## Aplicativo Web de programação visual simplificada
-Este projeto irá permitir enviar um código padronizado a dispostivos microcontrolados com suporte a WiFi ou rede Ethernet.
-Atualmente está em fase de testes do visual e protótipo do sistema e padrão de comunicação. Todo o software foi projetado para ser um Web App, desenvlvido utilizando Vue.js.
+# progme
 
-### Como executar o sistema
-1. Através do NPM, instale o Vue.js CLI com "npm install vue" (adicione argumento -g para instalar de forma global no sistema);
-2. Instale as dependências do sistema com "npm install";
-3. Execute com "npm run serve";
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
