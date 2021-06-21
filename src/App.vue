@@ -22,12 +22,19 @@
             Exibir código Arduino <b v-if="show_arduinoCode"> OK</b>
           </b-navbar-item>
           <b-navbar-item @click="switch_advancedMode">
-            Ver modo avançado <b v-if="show_advancedMode"> OK</b>
+            Ver conteúdo avançado <b v-if="show_advancedMode"> OK</b>
           </b-navbar-item>
         </b-navbar-dropdown>
       </template>
 
       <template #end>
+        <input
+          ref="openfileinput"
+          accept="*.json"
+          type="file"
+          style="display: none"
+          @change="open_file"
+        />
         <b-navbar-item tag="div">
           <router-link to="/"> Configurações </router-link>
         </b-navbar-item>
@@ -36,13 +43,7 @@
         </b-navbar-item>
       </template>
     </b-navbar>
-    <input
-      ref="openfileinput"
-      accept="*.json"
-      type="file"
-      style="display: none"
-      @change="open_file"
-    />
+
     <router-view />
   </div>
 </template>

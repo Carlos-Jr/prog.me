@@ -29,6 +29,15 @@
           </div>
         </section>
       </div>
+      <div class="column" v-if="show_advancedMode">
+        <section class="hero is-light is-fullheight-with-navbar">
+          <div class="hero-body">
+            <div class="">
+              <p>{{ format_jsonFile }}</p>
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
   </div>
 </template>
@@ -38,7 +47,7 @@ export default {
   name: "App",
   components: {},
   data() {
-    return {};
+    return { jsonerror: "" };
   },
   computed: {
     show_stepNumber: function () {
@@ -49,6 +58,9 @@ export default {
     },
     show_advancedMode: function () {
       return this.$store.state.show_advancedMode;
+    },
+    format_jsonFile: function () {
+      return JSON.stringify(this.$store.state.current_file, null, 2);
     },
   },
 };
