@@ -6,28 +6,46 @@
           <img src="./assets/logo.png" width="112" height="28" />
         </a>
 
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+        <a
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navbarBasicExample"
+        >
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
         </a>
       </div>
 
-      <div id="navbarBasicExample" class="navbar-menu">
+      <div id="navbarMenu" class="navbar-menu">
         <div class="navbar-start">
-          <a class="navbar-item"> Home </a>
-
-          <a class="navbar-item"> Documentation </a>
-
           <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link"> More </a>
+            <a class="navbar-link"> Arquivo </a>
 
             <div class="navbar-dropdown">
-              <a class="navbar-item"> About </a>
-              <a class="navbar-item"> Jobs </a>
-              <a class="navbar-item"> Contact </a>
+              <a class="navbar-item"> Novo </a>
+              <a class="navbar-item"> Abrir projeto </a>
+              <a class="navbar-item"> Salvar projeto </a>
               <hr class="navbar-divider" />
-              <a class="navbar-item"> Report an issue </a>
+              <a class="navbar-item"> Exportar código Arduino</a>
+            </div>
+          </div>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link"> Código </a>
+
+            <div class="navbar-dropdown">
+              <a class="navbar-item" @click="switch_stepNumber">
+                Mostrar números dos passos
+                <b v-if="show_stepNumber"> OK</b>
+              </a>
+              <a class="navbar-item" @click="switch_arduinoCode">
+                Exibir código Arduino <b v-if="show_arduinoCode"> OK</b>
+              </a>
+              <a class="navbar-item" @click="switch_advancedMode">
+                Ver estrutura avançada <b v-if="show_advancedMode"> OK</b>
+              </a>
             </div>
           </div>
         </div>
@@ -52,5 +70,29 @@
   </div>
 </template>
 
-<style>
-</style>
+<script>
+export default {
+  methods: {
+    switch_advancedMode() {
+      this.$store.commit("switch_advancedMode");
+    },
+    switch_arduinoCode() {
+      this.$store.commit("switch_arduinoCode");
+    },
+    switch_stepNumber() {
+      this.$store.commit("switch_stepNumber");
+    },
+  },
+  computed: {
+    show_stepNumber: function () {
+      return this.$store.state.show_stepNumber;
+    },
+    show_arduinoCode: function () {
+      return this.$store.state.show_arduinoCode;
+    },
+    show_advancedMode: function () {
+      return this.$store.state.show_advancedMode;
+    },
+  },
+};
+</script>
