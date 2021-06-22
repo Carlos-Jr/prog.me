@@ -1,42 +1,21 @@
 <template>
   <div id="app">
-    <div class="columns">
-      <div class="column is-one-fifth">
-        <section class="hero is-primary is-fullheight-with-navbar">
-          <div class="hero-body">
-            <div class="">
-              <p class="title">Blocos</p>
-              <p class="subtitle">Fullheight subtitle</p>
-            </div>
-          </div>
+    <div class="columns is-2">
+      <div class="column is-one-fifth has-background-primary has-text-white">
+        <section>
+          <b>MOVIMENTO</b>
+          <b>I/O</b>
+          <b>LÓGICA</b>
         </section>
       </div>
-      <div class="column">
-        <section class="hero is-light is-fullheight-with-navbar">
-          <div class="hero-body">
-            <div class="">
-              <p class="title">Código</p>
-            </div>
-          </div>
-        </section>
+      <div class="column has-background-light has-text-white">
+        <p class="title">Código</p>
       </div>
       <div class="column is-one-quarter" v-if="show_arduinoCode">
-        <section class="hero is-light is-fullheight-with-navbar">
-          <div class="hero-body">
-            <div class="">
-              <p class="title">Código Arduino</p>
-            </div>
-          </div>
-        </section>
+        <p v-html="arduino_code"></p>
       </div>
       <div class="column is-one-quarter" v-if="show_advancedMode">
-        <section class="hero is-light is-fullheight-with-navbar">
-          <div class="hero-body">
-            <div class="">
-              <p>{{ format_jsonFile }}</p>
-            </div>
-          </div>
-        </section>
+        <p>{{ format_jsonFile }}</p>
       </div>
     </div>
   </div>
@@ -49,6 +28,7 @@ export default {
   data() {
     return { jsonerror: "" };
   },
+  methods: {},
   computed: {
     show_stepNumber: function () {
       return this.$store.state.show_stepNumber;
@@ -62,6 +42,15 @@ export default {
     format_jsonFile: function () {
       return JSON.stringify(this.$store.state.current_file, null, 2);
     },
+    arduino_code: function () {
+      return this.$store.state.arduino_code.replace(/\n/g, "<br />");
+    },
   },
 };
 </script>
+
+<style scoped>
+.columns {
+  min-height: 91vh !important;
+}
+</style>

@@ -9,6 +9,7 @@ export default new Vuex.Store({
     show_arduinoCode: false,
     show_stepNumber: false,
     current_file: { name: "Projeto novo", content: { blocks: {}, total: 0 } },
+    arduino_code: "void setup( ){\n}\n \nvoid loop( ){\n}",
   },
   mutations: {
     switch_advancedMode: (state) =>

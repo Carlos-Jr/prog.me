@@ -11,8 +11,8 @@ const routes = [
     component: Home,
   },
   {
-    path: "/visualcode",
-    name: "Visual Code",
+    path: "/code",
+    name: "Code",
     component: () => import("../views/VisualCode.vue"),
   },
 ];
