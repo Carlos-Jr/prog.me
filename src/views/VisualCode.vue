@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="columns">
-      <div class="column is-one-quarter">
+      <div class="column is-one-fifth">
         <section class="hero is-primary is-fullheight-with-navbar">
           <div class="hero-body">
             <div class="">
@@ -20,7 +20,7 @@
           </div>
         </section>
       </div>
-      <div class="column" v-if="show_arduinoCode">
+      <div class="column is-one-quarter" v-if="show_arduinoCode">
         <section class="hero is-light is-fullheight-with-navbar">
           <div class="hero-body">
             <div class="">
@@ -29,7 +29,7 @@
           </div>
         </section>
       </div>
-      <div class="column" v-if="show_advancedMode">
+      <div class="column is-one-quarter" v-if="show_advancedMode">
         <section class="hero is-light is-fullheight-with-navbar">
           <div class="hero-body">
             <div class="">
