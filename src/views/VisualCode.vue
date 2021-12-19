@@ -106,6 +106,9 @@ export default {
 
 <style scoped>
 .is-full-height {
-  min-height: 91vh !important;
+  min-height: 95vh !important;
+}
+.flowchart-container {
+  height: 100%;
 }
 </style>

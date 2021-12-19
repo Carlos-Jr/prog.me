@@ -80,4 +80,5 @@ g[data-v-295297bd] {
 .flowchart-container svg[data-v-8730bea4] {
   cursor: -webkit-grab;
   cursor: grab;
+  height: 100%;
 }
