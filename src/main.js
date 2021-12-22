@@ -24,6 +24,8 @@ import {
   faCaretUp,
   faUpload,
   faWindowClose,
+  faTrash,
+  faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -42,7 +44,9 @@ library.add(
   faEyeSlash,
   faCaretDown,
   faCaretUp,
-  faUpload
+  faUpload,
+  faTrash,
+  faTrashAlt
 );
 Vue.component("vue-fontawesome", FontAwesomeIcon);
 
