@@ -292,52 +292,79 @@ export default {
     data_current: function () {
       this.$store.state.current_file.content = this.data_current;
       this.$store.state.arduino_code = "";
-      this.$store.state.arduino_code += "void setup( ){\n}\n \nvoid loop( ){\n";
+      let loop_code = "";
+      let setup_pins = [];
+      let setup_code = "";
       for (let index = 0; index < this.data_current.length; index++) {
         const element = this.data_current[index];
-        if (element.type == 0)
-          this.$store.state.arduino_code +=
+        //Se o pino não foi configurado no SETUP, configura
+        let need_config = setup_pins.findIndex(function (i) {
+          return i === element.pin;
+        });
+        if (need_config == -1) {
+          setup_pins.push(element.pin);
+          if (element.type < 2)
+            setup_code += "\t pinMode(" + element.pin + ",INPUT);\n";
+          else if (element.type < 4)
+            setup_code += "\t pinMode(" + element.pin + ",OUTPUT);\n";
+        }
+        // adiciona os comandos no loop
+        if (element.type == 0) {
+          loop_code +=
             "\tbool " + element.var + " = digitalRead(" + element.pin + ");\n";
-        else if (element.type == 1)
-          this.$store.state.arduino_code +=
+        } else if (element.type == 1) {
+          loop_code +=
             "\tint " + element.var + " = analogRead(" + element.pin + ");\n";
-        else if (element.type == 2)
-          this.$store.state.arduino_code +=
+        } else if (element.type == 2) {
+          loop_code +=
             "\tdigitalWrite(" + element.pin + "," + element.value + ");\n";
-        else if (element.type == 3)
-          this.$store.state.arduino_code +=
+        } else if (element.type == 3) {
+          loop_code +=
             "\t analogWrite(" + element.pin + "," + element.value + ");\n";
-        else if (element.type == 4) {
+        } else if (element.type == 4) {
           if (index > 0) {
             if (this.data_current[index - 1].type < 2) {
               let variable = this.data_current[index - 1].var;
-              this.$store.state.arduino_code +=
+              loop_code +=
                 "\tif(" + variable + element.pin + element.value + "){\n";
 
               for (let j = 0; j < element.blocks.length; j++) {
+                //Se o pino não foi configurado no SETUP, configura
+                let need_config = setup_pins.findIndex(function (i) {
+                  return i === element.blocks[j].pin;
+                });
+                if (need_config == -1) {
+                  setup_pins.push(element.blocks[j].pin);
+                  if (element.blocks[j].type < 2)
+                    setup_code +=
+                      "\t pinMode(" + element.blocks[j].pin + ",INPUT);\n";
+                  else if (element.blocks[j].type < 4)
+                    setup_code +=
+                      "\t pinMode(" + element.blocks[j].pin + ",OUTPUT);\n";
+                }
                 if (element.blocks[j].type == 0)
-                  this.$store.state.arduino_code +=
+                  loop_code +=
                     "\t\t bool " +
                     element.blocks[j].var +
                     " = digitalRead(" +
                     element.blocks[j].pin +
                     ");\n";
                 else if (element.blocks[j].type == 1)
-                  this.$store.state.arduino_code +=
+                  loop_code +=
                     "\t\t int " +
                     element.blocks[j].var +
                     " = analogRead(" +
                     element.blocks[j].pin +
                     ");\n";
                 else if (element.blocks[j].type == 2)
-                  this.$store.state.arduino_code +=
+                  loop_code +=
                     "\t\t digitalWrite(" +
                     element.blocks[j].pin +
                     "," +
                     element.blocks[j].value +
                     ");\n";
                 else if (element.blocks[j].type == 3)
-                  this.$store.state.arduino_code +=
+                  loop_code +=
                     "\t\t analogWrite(" +
                     element.blocks[j].pin +
                     "," +
@@ -345,12 +372,17 @@ export default {
                     ");\n";
               }
 
-              this.$store.state.arduino_code += "\n\t}";
+              loop_code += "\n\t}\n";
             }
           }
         }
       }
-      this.$store.state.arduino_code += "\n}";
+      this.$store.state.arduino_code =
+        "void setup( ){\n " +
+        setup_code +
+        "}\n \nvoid loop( ){\n" +
+        loop_code +
+        "\n}\n";
     },
     current_file: function () {
       this.data_current = this.$store.state.current_file.content;
@@ -400,5 +432,11 @@ export default {
   min-height: 100px;
   color: rgba(0, 0, 0, 0.7);
   margin-left: auto;
+}
+.tabs a:hover {
+  border-bottom-color: white !important;
+}
+.tabs a {
+  border-bottom-color: white !important;
 }
 </style>

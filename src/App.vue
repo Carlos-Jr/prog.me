@@ -73,10 +73,9 @@
           </b-button>
         </b-navbar-item>
         <b-navbar-item tag="div">
-          <a class="button is-ghost">Configurações </a></b-navbar-item
-        >
-        <b-navbar-item tag="div">
-          <a class="button is-primary" @click="send_file"> Enviar </a>
+          <a class="button is-primary" @click="send_file">
+            <b-icon pack="fas" icon="upload" size="is-small"></b-icon>
+          </a>
         </b-navbar-item>
       </template>
     </b-navbar>
