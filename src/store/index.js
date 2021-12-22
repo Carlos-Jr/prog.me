@@ -8,7 +8,7 @@ export default new Vuex.Store({
     show_advancedMode: false,
     show_arduinoCode: false,
     show_stepNumber: false,
-    current_file: { name: "Projeto novo", content: { blocks: {}, total: 0 } },
+    current_file: { name: "Projeto novo", content: [] },
     arduino_code: "void setup( ){\n}\n \nvoid loop( ){\n}",
   },
   mutations: {
@@ -21,7 +21,7 @@ export default new Vuex.Store({
     new_file: (state) =>
       (state.current_file = {
         name: "Projeto novo",
-        content: { blocks: {}, total: 0 },
+        content: [],
       }),
   },
   actions: {},

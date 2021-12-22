@@ -1,41 +1,47 @@
 <template>
   <div id="app">
     <div class="columns is-2 is-full-height">
-      <div class="column is-one-fifth has-background-dark has-text-white">
+      <div class="column is-one-fifth has-background-dark">
         <section>
-          <div class="buttons" style="padding: 30px">
-            <b-button
-              type="is-warning"
-              class="box"
-              expanded
-              @click="add_to_code(0, '1', 0, 'Ler entrada digital')"
-              >Ler entrada digital</b-button
-            >
-            <b-button
-              type="is-warning"
-              class="box"
-              expanded
-              @click="add_to_code(1, 'A1', 0, 'Ler entrada analógica')"
-              >Ler entrada analógica</b-button
-            >
-            <b-button
-              type="is-danger"
-              class="box"
-              expanded
-              @click="add_to_code(2, '1', 0, 'Escrever saída digital')"
-              >Escrever saída digital</b-button
-            >
-            <b-button
-              type="is-danger"
-              class="box"
-              expanded
-              @click="add_to_code(3, '5', 0, 'Escrever saída PWM')"
-              >Escrever saída PWM</b-button
-            >
-          </div>
+          <b-tabs position="is-centered" class="block">
+            <b-tab-item label="Arduino">
+              <div class="buttons" style="padding: 30px">
+                <b-button
+                  type="is-warning"
+                  class="box"
+                  expanded
+                  @click="add_to_code(0, '1', 0, 'Ler entrada digital')"
+                  >Ler entrada digital</b-button
+                >
+                <b-button
+                  type="is-warning"
+                  class="box"
+                  expanded
+                  @click="add_to_code(1, 'A1', 0, 'Ler entrada analógica')"
+                  >Ler entrada analógica</b-button
+                >
+                <b-button
+                  type="is-danger"
+                  class="box"
+                  expanded
+                  @click="add_to_code(2, '1', 0, 'Escrever saída digital')"
+                  >Escrever saída digital</b-button
+                >
+                <b-button
+                  type="is-danger"
+                  class="box"
+                  expanded
+                  @click="add_to_code(3, '5', 0, 'Escrever saída PWM')"
+                  >Escrever saída PWM</b-button
+                >
+              </div>
+            </b-tab-item>
+            <b-tab-item label="Robô"></b-tab-item>
+            <b-tab-item label="Drone"></b-tab-item>
+          </b-tabs>
         </section>
       </div>
-      <div class="column has-background-light has-text-white">
+      <div class="column has-background-light has-text-white box">
         <draggable v-model="data_current">
           <transition-group>
             <div
@@ -47,9 +53,27 @@
                 'is-read': element.type < 2,
               }"
             >
-              {{ element.label }} no pino {{ element.pin }}
+              {{ element.label }} no pino
+              <b
+                style="cursor: pointer"
+                @click="
+                  get_new_value(element, 'pin', 'Qual o pino deseja utilizar?')
+                "
+                >{{ element.pin }}</b
+              >
               <span v-if="element.type >= 2"
-                >, o valor {{ element.value }}</span
+                >, o valor
+                <b
+                  style="cursor: pointer"
+                  @click="
+                    get_new_value(
+                      element,
+                      'value',
+                      'Qual o novo valor para escrever no pino?'
+                    )
+                  "
+                  >{{ element.value }}</b
+                ></span
               >
               <a
                 @click="remove_from_code(element.id)"
@@ -67,7 +91,11 @@
           </transition-group>
         </draggable>
       </div>
-      <div class="column is-one-quarter" v-if="show_arduinoCode">
+      <div
+        class="column is-two-fifth"
+        style="padding: 30px"
+        v-if="show_arduinoCode"
+      >
         <p v-html="arduino_code"></p>
       </div>
       <div class="column is-one-quarter" v-if="show_advancedMode">
@@ -90,6 +118,17 @@ export default {
     };
   },
   methods: {
+    get_new_value(variable, propety, label) {
+      console.log(variable, propety, label);
+      this.$buefy.dialog.prompt({
+        message: label,
+        inputAttrs: {
+          placeholder: variable[propety],
+        },
+        trapFocus: true,
+        onConfirm: (value) => (variable[propety] = value),
+      });
+    },
     add_to_code(type, pin, value, label) {
       this.data_current.push({
         id: this.data_current.length,
@@ -126,10 +165,15 @@ export default {
     arduino_code: function () {
       return this.$store.state.arduino_code.replace(/\n/g, "<br />");
     },
+    current_file: function () {
+      return this.$store.state.current_file.content;
+    },
   },
   watch: {
     data_current: function () {
-      this.$store.state.arduino_code = "void setup( ){\n}\n \nvoid loop( ){\n";
+      this.$store.state.current_file.content = this.data_current;
+      this.$store.state.arduino_code = "";
+      this.$store.state.arduino_code += "void setup( ){\n}\n \nvoid loop( ){\n";
       for (let index = 0; index < this.data_current.length; index++) {
         const element = this.data_current[index];
         if (element.type == 0)
@@ -151,6 +195,9 @@ export default {
       }
       this.$store.state.arduino_code += "\n}";
     },
+    current_file: function () {
+      this.data_current = this.$store.state.current_file.content;
+    },
   },
 };
 </script>
@@ -162,14 +209,17 @@ export default {
 .box {
   box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
     rgba(0, 0, 0, 0.22) 0px 10px 10px;
-  margin: 10px;
 }
 .is-write {
   background-color: #f14668;
+  max-width: 30vw;
   color: #fff;
+  margin: 10px;
 }
 .is-read {
   background-color: #ffe08a;
+  max-width: 30vw;
   color: rgba(0, 0, 0, 0.7);
+  margin: 10px;
 }
 </style>
